@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => false %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => false %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
   <body>
@@ -24,16 +24,22 @@
         <div class="navbar-collapse collapse" id="navbar-main">
           <ul class="nav navbar-nav">
             <li>
-              <a href="../help/">Help</a>
-            </li>
-            <li>
-              <a href="http://news.bootswatch.com">Blog</a>
+              <li class="<%= 'active' if current_page?(games_path) %>">
+                <%= link_to "Games", games_path %>
+              </li>
             </li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="http://builtwithbootstrap.com/" target="_blank">Built With Bootstrap</a></li>
-            <li><a href="https://wrapbootstrap.com/?ref=bsw" target="_blank">WrapBootstrap</a></li>
+              <% if user_signed_in? %>
+                <li class="<%= 'active' if current_page?(edit_user_registration_path) %>"><%= link_to "Profile", edit_user_registration_path %></li>
+              <% end %>
+              <% if user_signed_in? %>
+                <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
+              <% else %>
+                <li class="<%= 'active' if current_page?(new_user_registration_path) %>"><%= link_to "New User", new_user_registration_path %></li>
+                <li class="<%= 'active' if current_page?(new_user_session_path) %>"><%= link_to "Login", new_user_session_path %></li>
+              <% end %>
           </ul>
 
         </div>
@@ -42,6 +48,7 @@
 
 
     <div class="container">
+      <%= render 'layouts/flash_messages' %>
       <%= yield %>
     </div>
 
