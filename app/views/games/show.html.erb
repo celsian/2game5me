@@ -1,2 +1,14 @@
-<h1>Games#show</h1>
-<p>Find me in app/views/games/show.html.erb</p>
+<div class="row">
+  <div class="col-md-12">
+    <h2><%= @game.title %> <%= link_to "Edit", edit_game_path(@game), class: "btn btn-primary pull-right" %></h2>
+  </div>
+  <div class="col-md-6">
+    <p>Genre: <%= @game.genre %></p>
+  </div>
+  <div class="col-md-6">
+    <p class="pull-right">Release Date: <%= @game.release_date %></p>
+  </div>
+  <div class="col-md-12">
+    <p><%= @game.description %></p>
+  </div>
+</div>

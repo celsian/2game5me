@@ -1,3 +1,31 @@
-Games will be displayed here.<br>
-Games#Index<br>
-<%= link_to "index", root_path %>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Games:</h2>
+    <table class="table-striped" width="100%">
+      <tr>
+        <th>
+          Title
+        </th>
+        <th width="25%">
+          Genre
+        </th>
+        <th width="25%">
+          Release Date
+        </th>
+      </tr>
+      <% @games.each do |game| %>
+      <tr>
+        <td>
+          <%= link_to game.title, game_path(game) %>
+        </td>
+        <td>
+          <%= game.genre %>
+        </td>
+        <td>
+          <%= game.release_date %>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

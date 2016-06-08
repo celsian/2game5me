@@ -7,15 +7,12 @@ RSpec.describe GamesController, type: :controller do
       get :index
       expect(response).to have_http_status(:success)
     end
-  end
 
-  describe "GET #show" do
-    let(:game) { create(:game) }
-    
-    it "returns http success" do
-      get :show, id: game.id
+    it "assigns all games" do
+      create_list(:game, 3)
+      get :index
 
-      expect(response).to render_template(:show)
+      expect(assigns(:games)).to eq(Game.all)
     end
   end
 
@@ -33,14 +30,24 @@ RSpec.describe GamesController, type: :controller do
     end
   end
 
+  describe "GET #show" do
+    let(:game) { create(:game) }
+    
+    it "returns http success" do
+      get :show, id: game.id
+
+      expect(response).to render_template(:show)
+    end
+  end
+
   describe "POST #create" do
     let(:params) { { game: attributes } }
-    let(:attributes) { { title: "ok", genre: "ok", description: "ok" } }
+    let(:attributes) { { title: "ok", genre: "ok", description: "ok", release_date: "Soon™" } }
 
-    it "redirects to root path" do
+    it "redirects to created games path" do
       post :create, params
 
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to(game_path(Game.last))
     end
 
     it "creates the game" do
@@ -48,5 +55,41 @@ RSpec.describe GamesController, type: :controller do
 
       expect(assigns(:game)).to be_persisted 
     end
+  end
+
+  describe "GET #edit" do
+    let(:game) { create(:game) }
+
+    it "returns http success" do
+      get :edit, id: game.id
+
+      expect(response).to render_template(:edit)
+    end
+
+    it "selects the right game" do
+      get :edit, id: game.id
+
+      expect(assigns(:game)).to eq(game)
+    end
+
+    describe "PATCH #update" do
+      let(:game) { create(:game) }
+      let(:id) { game.id }
+      let(:params) { { id: id, game: attributes } }
+      let(:attributes) { { title: "ok", genre: "ok", description: "ok", release_date: "delayed" } }
+
+      it "updates the proper game" do
+        patch :update, params
+
+        expect((game.reload).title).to eq("ok")
+      end
+
+      it "redirects to the game show page" do
+        patch :update, params
+
+        expect(response).to redirect_to(game_path(game))
+      end
+    end
+
   end
 end
